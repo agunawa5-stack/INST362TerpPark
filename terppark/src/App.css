@@ -1,14 +1,40 @@
 
-#root {
+.map-wrapper {
+  position: relative;
   width: 100%;
   height: 100vh;
 }
 
-body {
-  margin: 0;
+.drawing-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding: 12px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
-.leaflet-container {
-  width: 100%;
-  height: 100%;
+.drawing-controls button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #222;
+  cursor: pointer;
+}
+
+.drawing-controls button:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.drawing-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
