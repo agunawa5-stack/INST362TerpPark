@@ -3,6 +3,9 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 
+import ParkingLot from "./components/ParkingLot";
+import { parkingLots } from "./data/parkingLots";
+
 function App() {
   return (
     <MapContainer
@@ -15,8 +18,19 @@ function App() {
         attribution='&copy; OpenStreetMap contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      {/* Draw all parking lots on the map */}
+      {parkingLots.map((lot) => (
+        <ParkingLot 
+          key={lot.id} 
+          lot={lot} 
+          status="unknown"
+        />
+      ))}
     </MapContainer>
+    
   );
 }
+
 
 export default App;
