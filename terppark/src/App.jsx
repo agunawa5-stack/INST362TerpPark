@@ -6,9 +6,10 @@ import "./App.css";
 
 import MapResize from "./components/MapResize";
 import ParkingLot from "./components/ParkingLot";
+import ParkingFilters from "./components/ParkingFilters";
 import PolygonDrawer from "./components/PolygonDrawer";
 import { parkingLots } from "./data/parkingLots";
-import ParkingFilters from "./components/ParkingFilters";
+import { getParkingStatus } from "./utils/parkingRules";
 
 // Campus boundaries to restrict map panning
 const campusBounds = [
@@ -58,9 +59,12 @@ function App() {
     Boolean(import.meta.env.VITE_CARTO_KEY)
   );
 
-
-
-
+const filters = {
+  parkingType,
+  selectedPermit,
+  parkingTime,
+  selectedDateTime,
+};
 
   return (
     <div className="map-wrapper">
@@ -127,14 +131,18 @@ function App() {
           maxZoom={20}
         />
 
-        {/* Existing parking lot overlays */}
-        {parkingLots.map((lot) => (
-          <ParkingLot
-            key={lot.id}
-            lot={lot}
-            status="unknown"
-          />
-        ))}
+        {/* Display parking lots based on selected filters */}
+        {parkingLots.map((lot) => {
+          const result = getParkingStatus(lot, filters);
+          return (
+            <ParkingLot
+              key={lot.id}
+              lot={lot}
+              status={result.status}
+              reason={result.reason}
+            />
+          );
+        })}
 
         {/* Developer drawing layer */}
         <PolygonDrawer

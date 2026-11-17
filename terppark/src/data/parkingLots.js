@@ -3,6 +3,7 @@ export const parkingLots = [
   {
     id: "1",
     name: "JJ3",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.987009, -76.949050],
@@ -14,6 +15,7 @@ export const parkingLots = [
   {
     id: "2",
     name: "JJ2",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.985150, -76.949060],
@@ -27,6 +29,7 @@ export const parkingLots = [
   {
     id: "3",
     name: "3",
+    restrictionType: "red_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.985150, -76.951960],
@@ -38,6 +41,7 @@ export const parkingLots = [
   {
     id: "4",
     name: "1F",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.985220, -76.952020],
@@ -51,6 +55,7 @@ export const parkingLots = [
   {
     id: "5",
     name: "1C",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.986180, -76.949920],
@@ -66,6 +71,7 @@ export const parkingLots = [
   {
     id: "6",
     name: "1D",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.986180, -76.949920],
@@ -80,6 +86,7 @@ export const parkingLots = [
   {
     id: "7",
     name: "1B",
+    restrictionType: "black_sign",
     description: "Parking information coming soon",
     coordinates: [
       [38.987097, -76.949770],

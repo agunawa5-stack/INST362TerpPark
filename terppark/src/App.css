@@ -191,3 +191,33 @@
   padding: 0;
   cursor: pointer;
 }
+
+.parking-lot-label {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.parking-lot-label::before {
+  display: none;
+}
+
+.parking-lot-label-allowed {
+  color: #15803d;
+}
+
+.parking-lot-label-restricted {
+  color: #b91c1c;
+}
+
+.parking-lot-label-verify {
+  color: #b45309;
+}
+
+.parking-lot-label-unknown {
+  color: #4b5563;
+}
