@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 
@@ -8,7 +8,7 @@ import MapResize from "./components/MapResize";
 import ParkingLot from "./components/ParkingLot";
 import PolygonDrawer from "./components/PolygonDrawer";
 import { parkingLots } from "./data/parkingLots";
-
+import ParkingFilters from "./components/ParkingFilters";
 
 // Campus boundaries to restrict map panning
 const campusBounds = [
@@ -17,6 +17,11 @@ const campusBounds = [
 ];
 
 function App() {
+  const [parkingType, setParkingType] = useState("visitor");
+  const [selectedPermit, setSelectedPermit] = useState("");
+  const [parkingTime, setParkingTime] = useState("now");
+  const [selectedDateTime, setSelectedDateTime] = useState("");
+  
   // Controls whether map clicks add polygon points
   const [drawingEnabled, setDrawingEnabled] = useState(false);
 
@@ -52,6 +57,10 @@ function App() {
     "CARTO key loaded:",
     Boolean(import.meta.env.VITE_CARTO_KEY)
   );
+
+
+
+
 
   return (
     <div className="map-wrapper">
@@ -93,9 +102,24 @@ function App() {
         maxBounds={campusBounds}
         maxBoundsViscosity={1.0}
         scrollWheelZoom={true}
+        zoomControl={false}
         style={{ height: "100%", width: "100%" }}
       >
         <MapResize />
+        <ZoomControl position="topright" />
+
+        {/* User-facing parking filters */}
+        <ParkingFilters
+          parkingType={parkingType}
+          setParkingType={setParkingType}
+          selectedPermit={selectedPermit}
+          setSelectedPermit={setSelectedPermit}
+          parkingTime={parkingTime}
+          setParkingTime={setParkingTime}
+          selectedDateTime={selectedDateTime}
+          setSelectedDateTime={setSelectedDateTime}
+        />
+
         <TileLayer
           attribution="&copy; OpenStreetMap contributors &copy; CARTO"
           url={`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_KEY}`}
