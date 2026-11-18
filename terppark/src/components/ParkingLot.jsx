@@ -25,6 +25,12 @@ const statusStyles = {
     fillOpacity: 0.20,
     textColor: "#4b5563",
   },
+  paid: {
+  color: "#3b82f6",
+  fillColor: "#3b82f6",
+  fillOpacity: 0.25,
+  textColor: "#1d4ed8",
+  },
 };
 
 function ParkingLot({ lot, status = "unknown", reason = "" }) {
@@ -41,20 +47,22 @@ function ParkingLot({ lot, status = "unknown", reason = "" }) {
       }}
     >
       <Tooltip
+        key={`${lot.id}-${status}`}
         permanent
         direction="center"
         className={`parking-lot-label parking-lot-label-${status}`}
       >
-        {lot.name}
+        {lot.code}
       </Tooltip>
 
       <Popup>
-        <h3>{lot.name}</h3>
+        <h3>{lot.displayName}</h3>
+        <p>Lot Code: {lot.code}</p>
         <p>{lot.description}</p>
         <p>
           <strong>Parking Status:</strong> {status}
         </p>
-        <p>{reason}</p>
+        {reason && <p>{reason}</p>}
       </Popup>
     </Polygon>
   );

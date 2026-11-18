@@ -10,19 +10,15 @@ const parsedData = Papa.parse(csvData, {
 
 // convert csv rows into the structure used in the app
 export const parkingLots = parsedData.data.map((row) => ({
-  id: String(row.id).trim(),
-
-  name: row.name.trim().toUpperCase(),
-
-  description: row.notes || "Parking information coming soon",
-
+  id: row.id.trim(),
+  code: row.code.trim().toUpperCase(),
+  displayName: row.displayName.trim(),
   restrictionType: row.restrictionType?.trim() || "unknown",
-
   // allow multiple categories separated by |
   permitCategory: row.permitCategory
-    ? row.permitCategory.split("|").map((category) => category.trim())
+    ? row.permitCategory.split("|").map((value) => value.trim())
     : ["unknown"],
-
+  description: row.notes || "Parking information coming soon",
   // convert coordinate text into an actual array
   coordinates: JSON.parse(row.cords),
 }));

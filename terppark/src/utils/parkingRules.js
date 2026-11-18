@@ -1,25 +1,6 @@
 
 // figures out a parking lot's status based on user filters
 
-// commuter lot designations listed by UMD
-const commuterLots = ["1", "6", "9", "11", "SDG"];
-
-// takes the main lot number from a name such as "1C" or "Lot 1F"
-function getLotDesignation(name) {
-  const cleanedName = name
-    .trim()
-    .toUpperCase()
-    .replace(/^LOT\s*/, "");
-
-  if (cleanedName === "SDG") {
-    return "SDG";
-  }
-  // example: "1c" becomes "1"
-  const match = cleanedName.match(/^(\d+)/);
-
-  return match ? match[1] : cleanedName;
-}
-
 // returns the date/time that the user wants to park
 export function getParkingDateTime(parkingTime, selectedDateTime) {
     if (parkingTime === "now") {
@@ -72,20 +53,29 @@ export function getParkingStatus(lot, filters) {
         minutes >= 7 * 60 &&
         minutes < 16 * 60;
 
+    // Check if we're outside normal permit enforcement hours
     const outsidePermitHours = !duringPermitHours;
 
-    // identify which lot we're evaluating
-    const designation = getLotDesignation(lot.name);
+    // paid visitor parking from 7 AM - midnight, daily
+    const duringPaidHours = minutes >= 7 * 60;
+
+    // check whether this lot is designated for commuter parking
+    const isCommuterLot =
+        lot.permitCategory?.includes("commuter") ?? false;
+
+    const isCommuter =
+        parkingType === "permit" &&
+        selectedPermit === "commuter";
 
     // checks commuter overnight restriction
     const commuterOvernightRestriction =
-        parkingType === "permit" &&
-        selectedPermit === "commuter" &&
-        commuterLots.includes(designation) &&
+        isCommuter &&
+        isCommuterLot &&
         isWeekday &&
         minutes >= 3 * 60 &&
         minutes < 5 * 60;
 
+    // rule 1: overnight restriction for commuter lots
     if (commuterOvernightRestriction) {
         return {
             status: "restricted",
@@ -95,7 +85,26 @@ export function getParkingStatus(lot, filters) {
         };
     }
 
-    // check lots with a verified 7 AM–4 PM schedule
+    // rule 2: paid visitor parking
+    if (lot.restrictionType === "visitor_paid") {
+        if (duringPaidHours) {
+            return {
+                status: "paid",
+                reason:
+                    "Paid visitor parking. Payment is generally " +
+                    "required from 7 AM to midnight, daily.",
+            };
+        }
+
+        return {
+            status: "verify",
+            reason:
+                "Outside normal payment enforcement hours. " +
+                "Verify overnight access and posted restrictions.",
+        };
+    }
+
+    // rule 3: black sign parking
     if (lot.restrictionType === "black_sign") {
         if (outsidePermitHours) {
             return {
@@ -105,8 +114,28 @@ export function getParkingStatus(lot, filters) {
                     "Check posted signs and event restrictions.",
             };
         }
+        // during enforcement, evaluate permit category
+        if (
+            parkingType === "permit" &&
+            selectedPermit &&
+            lot.permitCategory?.includes(selectedPermit)
+        ) {
+            return {
+                status: "verify",
+                reason:
+                    "This lot serves your permit category, " +
+                    "but your specific lot assignment must match.",
+            };
+        }
+        return {
+            status: "restricted",
+            reason:
+                "Permit restrictions are currently enforced " +
+                "from 7 AM to 4 PM on weekdays.",
+        };
     }
-    // red signs require  permit registration 24 hours a day, 7 days a week
+
+    // rule 4: red sign parking
     if (lot.restrictionType === "red_sign") {
         return {
             status: "restricted",
@@ -114,35 +143,6 @@ export function getParkingStatus(lot, filters) {
                 "This lot requires an authorized parking permit" +
                 "registration 24 hours a day.",
         };
-    }
-
-    // visitor rules
-    if (parkingType === "visitor") {
-        return {
-            status: "unknown",
-            reason: "Visitor parking rules have not been fully implemented.",
-        };
-    }
-
-    // require the user to select a permit
-    if (!selectedPermit) {
-        return {
-            status: "unknown",
-            reason: "Please select your parking permit.",
-        };
-    }
-
-    // commuter parking logic
-    if (selectedPermit === "commuter") {
-        if (commuterLots.includes(designation)) {
-            return {
-                status: designation === "SDG" ? "verify" : "allowed",
-                reason:
-                    "Designated commuter parking option. " +
-                    "Check that your assigned registration permits " +
-                    "this lot and review applicable restrictions.",
-            };
-        }
     }
 
     // default status for unimplemented rules

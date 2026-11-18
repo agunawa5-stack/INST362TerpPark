@@ -192,7 +192,9 @@
   cursor: pointer;
 }
 
-.parking-lot-label {
+
+/* General parking lot label styling */
+.leaflet-tooltip.parking-lot-label {
   background: transparent;
   border: none;
   box-shadow: none;
@@ -202,22 +204,28 @@
   white-space: nowrap;
 }
 
-.parking-lot-label::before {
+/* Remove Leaflet's tooltip arrow */
+.leaflet-tooltip.parking-lot-label::before {
   display: none;
 }
 
-.parking-lot-label-allowed {
+/* Label colors based on parking status */
+.leaflet-tooltip.parking-lot-label-allowed {
   color: #15803d;
 }
 
-.parking-lot-label-restricted {
+.leaflet-tooltip.parking-lot-label-restricted {
   color: #b91c1c;
 }
 
-.parking-lot-label-verify {
+.leaflet-tooltip.parking-lot-label-verify {
   color: #b45309;
 }
 
-.parking-lot-label-unknown {
+.leaflet-tooltip.parking-lot-label-unknown {
   color: #4b5563;
+}
+
+.leaflet-tooltip.parking-lot-label-paid {
+  color: #1d4ed8;
 }
