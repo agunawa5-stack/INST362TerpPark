@@ -1,102 +1,28 @@
+import Papa from "papaparse";
+import csvData from "./parkingLots.csv?raw";
 
-export const parkingLots = [
-  {
-    id: "1",
-    name: "JJ3",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.987009, -76.949050],
-      [38.987009, -76.949180],
-      [38.985213, -76.949180],
-      [38.985213, -76.949050],
-    ],
-  },
-  {
-    id: "2",
-    name: "JJ2",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.985150, -76.949060],
-      [38.985150, -76.949600],
-      [38.984796, -76.949600],
-      [38.984796, -76.949390],
-      [38.984890, -76.949390],
-      [38.984890, -76.949060],
-    ],
-  },
-  {
-    id: "3",
-    name: "3",
-    restrictionType: "red_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.985150, -76.951960],
-      [38.985150, -76.949870],
-      [38.984920, -76.949870],
-      [38.984920, -76.951960],
-    ],
-  },
-  {
-    id: "4",
-    name: "1F",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.985220, -76.952020],
-      [38.985220, -76.951510],
-      [38.986044, -76.951510],
-      [38.986044, -76.951795],
-      [38.985800, -76.951795],
-      [38.985800, -76.952020],
-    ],
-  },
-  {
-    id: "5",
-    name: "1C",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.986180, -76.949920],
-      [38.986180, -76.951290],
-      [38.986090, -76.951290],
-      [38.986090, -76.951400],
-      [38.985245, -76.951430],
-      [38.985245, -76.949830],
-      [38.986060, -76.949830],
-      [38.986060, -76.949920],
-    ],
-  },
-  {
-    id: "6",
-    name: "1D",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.986180, -76.949920],
-      [38.986180, -76.951290],
-      [38.986270, -76.951290],
-      [38.986270, -76.951380],
-      [38.986360, -76.951380],
-      [38.987064, -76.949870],
-      [38.986290, -76.949870],
-    ],
-  },
-  {
-    id: "7",
-    name: "1B",
-    restrictionType: "black_sign",
-    description: "Parking information coming soon",
-    coordinates: [
-      [38.987097, -76.949770],
-      [38.987097, -76.949540],
-      [38.986875, -76.949540],
-      [38.986875, -76.949180],
-      [38.985235, -76.949180],
-      [38.985235, -76.949650],
-      [38.985100, -76.949650],
-      [38.985100, -76.949750],
-    ],
-  },
-];
+// converts csv into js objects
+const parsedData = Papa.parse(csvData, {
+  header: true,
+  skipEmptyLines: true,
+  transformHeader: (header) => header.trim(),
+});
+
+// convert csv rows into the structure used in the app
+export const parkingLots = parsedData.data.map((row) => ({
+  id: String(row.id).trim(),
+
+  name: row.name.trim().toUpperCase(),
+
+  description: row.notes || "Parking information coming soon",
+
+  restrictionType: row.restrictionType?.trim() || "unknown",
+
+  // allow multiple categories separated by |
+  permitCategory: row.permitCategory
+    ? row.permitCategory.split("|").map((category) => category.trim())
+    : ["unknown"],
+
+  // convert coordinate text into an actual array
+  coordinates: JSON.parse(row.cords),
+}));
