@@ -1,6 +1,24 @@
 
 // figures out a parking lot's status based on user filters
 
+const permitCategoryMap = {
+    commuter: "commuter",
+    resident: "resident",
+    overnight: "overnight",
+    staff: "faculty_staff",
+};
+
+// checks whether a lot serves the selected permit category
+function matchesPermitCategory(lot, selectedPermit) {
+    const category = permitCategoryMap[selectedPermit];
+
+    if (!category) {
+        return false;
+    }
+
+    return lot.permitCategory?.includes(category) ?? false;
+}
+
 // returns the date/time that the user wants to park
 export function getParkingDateTime(parkingTime, selectedDateTime) {
     if (parkingTime === "now") {
@@ -117,14 +135,14 @@ export function getParkingStatus(lot, filters) {
         // during enforcement, evaluate permit category
         if (
             parkingType === "permit" &&
-            selectedPermit &&
-            lot.permitCategory?.includes(selectedPermit)
+            matchesPermitCategory(lot, selectedPermit)
         ) {
             return {
                 status: "verify",
                 reason:
                     "This lot serves your permit category, " +
-                    "but your specific lot assignment must match.",
+                    "but your specific parking assignment " +
+                    "must authorize this area.",
             };
         }
         return {
@@ -137,11 +155,38 @@ export function getParkingStatus(lot, filters) {
 
     // rule 4: red sign parking
     if (lot.restrictionType === "red_sign") {
+        if (
+            parkingType === "permit" &&
+            matchesPermitCategory(lot, selectedPermit)
+        ) {
+            return {
+                status: "verify",
+                reason:
+                    "This lot is restricted 24 hours a day. " +
+                    "Your permit category may be eligible, but " +
+                    "you must have authorization for this specific lot.",
+            };
+        }
+
         return {
             status: "restricted",
             reason:
-                "This lot requires an authorized parking permit" +
-                "registration 24 hours a day.",
+                "This lot is restricted 24 hours a day. " +
+                "Your permit category is not eligible for this area.",
+        };
+    }
+
+    // rule 5: special permit parking
+    if (
+        parkingType === "permit" &&
+        selectedPermit === "special"
+    ) {
+        return {
+            status: "verify",
+            reason:
+                "Special permit privileges depend on the " +
+                "specific permit issued by UMD DOTS. " +
+                "Check your permit conditions.",
         };
     }
 
