@@ -1,0 +1,55 @@
+
+.parking-legend {
+    position: absolute;
+    bottom: 24px;
+    right: 20px;
+    z-index: 1000;
+    background: white;
+    padding: 14px 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    font-family: Arial, sans-serif;
+    color: black;
+    width: 205px;
+    max-width: calc(100vw - 40px);
+}
+
+.parking-legend h3 {
+    font-size: 15px;
+    margin: 0 0 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+    font-size: 12px;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.legend-color.allowed {
+    background: #22c55e;
+}
+
+.legend-color.restricted {
+    background: #ef4444;
+}
+
+.legend-color.unknown {
+    background: #9ca3af;
+}
+
+.legend-color.paid {
+    background: #3b82f6;
+}
+
+.legend-color.event {
+    background: #f59e0b;
+}

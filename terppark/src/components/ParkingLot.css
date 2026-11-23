@@ -1,0 +1,140 @@
+
+/* leaflet popup container */
+.parking-popup .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+
+.parking-popup .leaflet-popup-content {
+    margin: 0;
+    width: auto !important;
+}
+
+.parking-card {
+    padding: 18px;
+    font-family: Arial, sans-serif;
+    color: #1f2937;
+}
+
+/* header */
+.parking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.parking-card-header h3 {
+    margin: 0 0 4px;
+    font-size: 17px;
+    line-height: 1.3;
+}
+
+.parking-card-code {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+/* status badge */
+.parking-status {
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 5px 8px;
+    white-space: nowrap;
+}
+
+.parking-status-allowed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.parking-status-restricted {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.parking-status-verify,
+.parking-status-unknown {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.parking-status-paid {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.parking-status-event {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* description */
+.parking-card-description {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 12px 0;
+}
+
+.parking-card-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 14px 0;
+}
+
+/* information sections */
+.parking-card-section {
+    margin-bottom: 16px;
+}
+
+.parking-card-section-title {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    color: #6b7280;
+    margin-bottom: 7px;
+}
+
+.parking-card-value {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* permit tags */
+.parking-permits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.parking-permit-tag {
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 11px;
+}
+
+/*parking explanation */
+.parking-card-result {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.parking-card-result strong {
+    font-size: 12px;
+}
+
+.parking-card-result p {
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 6px 0 0;
+}
+

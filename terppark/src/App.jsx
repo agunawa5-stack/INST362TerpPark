@@ -10,6 +10,8 @@ import ParkingFilters from "./components/ParkingFilters";
 import PolygonDrawer from "./components/PolygonDrawer";
 import { parkingLots } from "./data/parkingLots";
 import { getParkingStatus } from "./utils/parkingRules";
+import ParkingLegend from "./components/ParkingLegend";
+import { useMapEvents } from "react-leaflet";
 
 // Campus boundaries to restrict map panning
 const campusBounds = [
@@ -17,11 +19,22 @@ const campusBounds = [
   [39.005, -76.925],
 ];
 
+function ZoomTracker({ setZoom }) {
+    useMapEvents({
+        zoomend(event) {
+            setZoom(event.target.getZoom());
+        },
+    });
+
+    return null;
+}
+
 function App() {
   const [parkingType, setParkingType] = useState("visitor");
   const [selectedPermit, setSelectedPermit] = useState("");
   const [parkingTime, setParkingTime] = useState("now");
   const [selectedDateTime, setSelectedDateTime] = useState("");
+  const [zoom, setZoom] = useState(16);
   
   // Controls whether map clicks add polygon points
   const [drawingEnabled, setDrawingEnabled] = useState(false);
@@ -109,7 +122,9 @@ const filters = {
         zoomControl={false}
         style={{ height: "100%", width: "100%" }}
       >
+
         <MapResize />
+        <ZoomTracker setZoom={setZoom} />
         <ZoomControl position="topright" />
 
         {/* User-facing parking filters */}
@@ -140,6 +155,7 @@ const filters = {
               lot={lot}
               status={result.status}
               reason={result.reason}
+              zoom={zoom}
             />
           );
         })}
@@ -151,6 +167,9 @@ const filters = {
           setPoints={setPoints}
         />
       </MapContainer>
+
+      <ParkingLegend />
+
     </div>
   );
 }

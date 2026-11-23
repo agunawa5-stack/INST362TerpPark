@@ -2,7 +2,7 @@
 .map-wrapper {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 
 .drawing-controls {
@@ -218,12 +218,13 @@
   color: #b91c1c;
 }
 
-.leaflet-tooltip.parking-lot-label-verify {
-  color: #b45309;
+.leaflet-tooltip.parking-lot-label-verify,
+.leaflet-tooltip.parking-lot-label-unknown {
+    color: #4b5563;
 }
 
-.leaflet-tooltip.parking-lot-label-unknown {
-  color: #4b5563;
+.leaflet-tooltip.parking-lot-label-event {
+    color: #b45309;
 }
 
 .leaflet-tooltip.parking-lot-label-paid {
