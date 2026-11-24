@@ -113,8 +113,9 @@ function ParkingLot({
             {/* parking information popup */}
             <Popup
                 className="parking-popup"
-                maxWidth={320}
-                minWidth={260}
+                minWidth={400}
+                maxWidth={500}
+                autoPan={true}
             >
                 <div className="parking-card">
 

@@ -138,3 +138,13 @@
     margin: 6px 0 0;
 }
 
+.parking-popup .leaflet-popup-content-wrapper {
+    width: clamp(380px, 42vw, 460px);
+    max-width: calc(100vw - 32px);
+    max-height: min(460px, calc(100vh - 140px));
+    overflow-y: auto;
+}
+
+.parking-popup .leaflet-popup-content {
+    width: 100% !important;
+}
