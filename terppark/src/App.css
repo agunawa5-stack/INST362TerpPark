@@ -39,6 +39,37 @@
   cursor: not-allowed;
 }
 
+.polygon-drag-handle {
+    background-color: #2563eb;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    cursor: grab;
+}
+
+.polygon-drag-handle.leaflet-marker-draggable:active {
+    cursor: grabbing;
+}
+
+.saved-polygon-panel {
+    position: absolute;
+    top: 250px;
+    right: 0px;
+    z-index: 1000;
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.saved-polygon-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
 .parking-filters {
   position: absolute;
   top: 20px;

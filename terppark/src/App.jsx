@@ -35,6 +35,7 @@ function App() {
   const [parkingTime, setParkingTime] = useState("now");
   const [selectedDateTime, setSelectedDateTime] = useState("");
   const [zoom, setZoom] = useState(16);
+  const [savedPolygons, setSavedPolygons] = useState([]);
   
   // Controls whether map clicks add polygon points
   const [drawingEnabled, setDrawingEnabled] = useState(false);
@@ -65,6 +66,28 @@ function App() {
       alert("Could not copy coordinates.");
     }
   }
+
+
+  function saveAndNewPolygon() {
+    // A polygon needs at least 3 points
+    if (points.length < 3) {
+      alert("Please draw at least 3 points.");
+      return;
+    }
+
+    // Save the current polygon
+    setSavedPolygons((previous) => [
+      ...previous,
+      {
+        id: Date.now(),
+        coordinates: [...points],
+      },
+    ]);
+
+    // Clear only the active drawing
+    setPoints([]);
+  }
+
 
   console.log("App is running!");
   console.log(
@@ -109,6 +132,46 @@ const filters = {
         >
           Copy Coordinates
         </button>
+        <button
+          onClick={saveAndNewPolygon}
+          disabled={points.length < 3}
+        >
+          Save & New Polygon
+        </button>
+
+        {import.meta.env.DEV && savedPolygons.length > 0 && (
+          <div className="saved-polygon-panel">
+            <h3>Saved Polygons</h3>
+
+            {savedPolygons.map((polygon, index) => (
+              <div key={polygon.id} className="saved-polygon-item">
+                <span>Polygon {index + 1}</span>
+
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      JSON.stringify(polygon.coordinates)
+                    );
+                  }}
+                >
+                  Copy
+                </button>
+
+                <button
+                  onClick={() => {
+                    setSavedPolygons((previous) =>
+                      previous.filter(
+                        (item) => item.id !== polygon.id
+                      )
+                    );
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <MapContainer
@@ -165,6 +228,7 @@ const filters = {
           enabled={drawingEnabled}
           points={points}
           setPoints={setPoints}
+          savedPolygons={savedPolygons}
         />
       </MapContainer>
 
