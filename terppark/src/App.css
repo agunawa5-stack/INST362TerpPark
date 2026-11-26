@@ -70,6 +70,19 @@
     margin-top: 8px;
 }
 
+.polygon-curve-handle {
+  background-color: #f59e0b;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+}
+
+.polygon-curve-handle.leaflet-marker-draggable:active {
+  cursor: grabbing;
+}
+
 .parking-filters {
   position: absolute;
   top: 20px;

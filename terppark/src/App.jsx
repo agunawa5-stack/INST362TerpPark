@@ -8,6 +8,7 @@ import MapResize from "./components/MapResize";
 import ParkingLot from "./components/ParkingLot";
 import ParkingFilters from "./components/ParkingFilters";
 import PolygonDrawer from "./components/PolygonDrawer";
+import { getCurvedPolygon } from "./utils/polygonCurves";
 import { parkingLots } from "./data/parkingLots";
 import { getParkingStatus } from "./utils/parkingRules";
 import ParkingLegend from "./components/ParkingLegend";
@@ -42,51 +43,64 @@ function App() {
 
   // Coordinates collected by clicking the map
   const [points, setPoints] = useState([]);
+  const [curveControls, setCurveControls] = useState({});
 
   // Remove the most recently added coordinate
   function undoPoint() {
     setPoints((previousPoints) => previousPoints.slice(0, -1));
+    setCurveControls({});
   }
 
   // Copy coordinates for use in parkingLots.js
   async function copyCoordinates() {
     if (points.length < 3) {
-      alert("Please draw at least 3 points first.");
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(
-        JSON.stringify(points, null, 2)
-      );
-
-      alert("Coordinates copied!");
-    } catch (error) {
-      console.error("Could not copy coordinates:", error);
-      alert("Could not copy coordinates.");
-    }
+    alert("Please draw at least 3 points first.");
+    return;
   }
+
+  // Convert curved edges into regular coordinates
+  const coordinates = getCurvedPolygon(
+    points,
+    curveControls
+  );
+
+  try {
+    await navigator.clipboard.writeText(
+      JSON.stringify(coordinates)
+    );
+
+    alert("Coordinates copied!");
+  } catch (error) {
+    console.error("Could not copy coordinates:", error);
+    alert("Could not copy coordinates.");
+    }
+  } 
 
 
   function saveAndNewPolygon() {
-    // A polygon needs at least 3 points
     if (points.length < 3) {
       alert("Please draw at least 3 points.");
       return;
     }
 
-    // Save the current polygon
+    // Save the complete shape, including curved edges
+    const coordinates = getCurvedPolygon(
+      points,
+      curveControls
+    );
+
     setSavedPolygons((previous) => [
       ...previous,
       {
-        id: Date.now(),
-        coordinates: [...points],
+        id: crypto.randomUUID(),
+        coordinates,
       },
     ]);
 
-    // Clear only the active drawing
-    setPoints([]);
-  }
+  // Prepare a fresh polygon
+  setPoints([]);
+  setCurveControls({});
+}
 
 
   console.log("App is running!");
@@ -120,8 +134,10 @@ const filters = {
         </button>
 
         <button
-          onClick={() => setPoints([])}
-          disabled={points.length === 0}
+          onClick={() => {
+            setPoints([]);
+            setCurveControls({});
+          }}
         >
           Clear
         </button>
@@ -228,6 +244,8 @@ const filters = {
           enabled={drawingEnabled}
           points={points}
           setPoints={setPoints}
+          curveControls={curveControls}
+          setCurveControls={setCurveControls}
           savedPolygons={savedPolygons}
         />
       </MapContainer>
